@@ -83,9 +83,12 @@ prompt_template = PromptTemplate(template=prompt, input_variables=["question"])
 
 chain = LLMChain(llm=model, prompt=prompt_template)
 
+def reasoning_tool_func(question):
+    return chain.run(question)
+
 Reasoning_agent = Tool(
-    name = "Reasoning Agent",
-    func=chain.run,
+    name="Reasoning Agent",
+    func=reasoning_tool_func,
     description="A Tool used for answering logic based and reasoning questions. "
 )
 ## Build the Agent 
