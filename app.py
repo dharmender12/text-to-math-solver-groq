@@ -104,7 +104,14 @@ if user_query:
     st.session_state['messages'].append({"role": "User", "content": user_query})
     st.chat_message("User").write(user_query)
     with st.chat_message("Assistant"):
-        st_callback = StreamlitCallbackHandler(st.container())
-        response = agent.run(user_query, callbacks=[st_callback])
-        st.session_state['messages'].append({"role": "Assistant", "content": response})
-        st.write(response) 
+        try:
+            st_callback = StreamlitCallbackHandler(st.container())
+            response = agent.run(user_query, callbacks=[st_callback])
+            st.session_state['messages'].append({"role": "Assistant", "content": response})
+            st.write(response)
+        except Exception as e:
+            error_msg = str(e)
+            if "api_key" in error_msg.lower() or "authentication" in error_msg.lower() or "401" in error_msg:
+                st.error("🔑 **Invalid or Missing Groq API Key!** Please check your API key in the sidebar and ensure it is valid.")
+            else:
+                st.error(f"⚠️ **An error occurred:** {error_msg}") 
