@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-st.title("Text TO Math Solver Using Groq LLama")
+st.title("Text TO Math Solver Using Groq")
 
 default_api_key = os.environ.get("GROQ_API_KEY", "")
 groq_api_key = st.sidebar.text_input(
