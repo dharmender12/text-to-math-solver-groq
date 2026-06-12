@@ -23,6 +23,10 @@ groq_api_key = st.sidebar.text_input(
     help="Get your Groq API key from https://console.groq.com/"
 )
 
+# Sanitize key: remove spaces, emojis, and non-ASCII characters
+if groq_api_key:
+    groq_api_key = re.sub(r'[^\x21-\x7E]', '', groq_api_key)
+
 if not groq_api_key:
     st.warning("Please enter your Groq API Key:")
     st.stop()
