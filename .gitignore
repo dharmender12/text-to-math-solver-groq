@@ -1,0 +1,21 @@
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Streamlit
+.streamlit/
+
+# Databases
+*.db
+*.sqlite
+
+# Python cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/

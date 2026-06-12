@@ -1,0 +1,9 @@
+faiss-cpu
+pypdf
+langchain-chroma
+ipykernel
+mysql-connector-python
+SQLAlchemy
+transformers
+numexpr
+wikipedia
