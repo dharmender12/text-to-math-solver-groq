@@ -120,23 +120,30 @@ if question:
         st.session_state.messages.append({"role": "user", "content": question})
         st.chat_message("user").write(question)
         
-        # Check if the question is a pure mathematical expression
-        if re.match(r'^[\d\.\+\-\*\/\^\(\)\s]+$', question):
-            try:
-                # Evaluate pure math expression directly for instant response
-                clean_expr = question.replace('^', '**').strip()
-                import numexpr
-                result = numexpr.evaluate(clean_expr).item()
-                response = f"Answer: {result}"
-            except Exception as e:
-                # Fallback to agent if direct evaluation fails
+        try:
+            # Check if the question is a pure mathematical expression
+            if re.match(r'^[\d\.\+\-\*\/\^\(\)\s]+$', question):
+                try:
+                    # Evaluate pure math expression directly for instant response
+                    clean_expr = question.replace('^', '**').strip()
+                    import numexpr
+                    result = numexpr.evaluate(clean_expr).item()
+                    response = f"Answer: {result}"
+                except Exception as e:
+                    # Fallback to agent if direct evaluation fails
+                    st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+                    response = assistant_agent.run(question, callbacks=[st_cb])
+            else:
+                # Run the agent and show thoughts using the callback handler
                 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
                 response = assistant_agent.run(question, callbacks=[st_cb])
-        else:
-            # Run the agent and show thoughts using the callback handler
-            st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-            response = assistant_agent.run(question, callbacks=[st_cb])
-            
-        st.session_state.messages.append({"role": "assistant", "content": response})
-        st.chat_message("assistant").write(response)
+                
+            st.session_state.messages.append({"role": "assistant", "content": response})
+            st.chat_message("assistant").write(response)
+        except Exception as e:
+            error_msg = str(e)
+            if "api_key" in error_msg.lower() or "authentication" in error_msg.lower() or "401" in error_msg:
+                st.error("🔑 **Invalid or Missing Groq API Key!** Please check your API key in the sidebar and ensure it is valid.")
+            else:
+                st.error(f"⚠️ **An error occurred:** {error_msg}")
         
