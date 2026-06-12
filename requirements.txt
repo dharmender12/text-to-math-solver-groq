@@ -1,9 +1,11 @@
-faiss-cpu
-pypdf
-langchain-chroma
-ipykernel
+streamlit
+langchain-core
+langchain-groq
+langchain-community
+langchain-classic
+python-dotenv
 mysql-connector-python
 SQLAlchemy
-transformers
 numexpr
 wikipedia
+pypdf
